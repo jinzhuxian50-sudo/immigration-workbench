@@ -565,5 +565,56 @@ table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
 
 <script src="../../_shared/js/echarts.min.js"></script>
 <script src="../../assets/charts.js"></script>
+<script src="../../note-contents.js"></script>
+<style>
+.note-modal-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
+}
+.note-modal-overlay.show { display: flex; }
+.note-modal-box {
+  background: #fff; border-radius: 12px; padding: 2rem; max-width: 560px;
+  width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.note-modal-box h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.4; }
+.note-modal-box .nm-content {
+  background: #faf9f7; border-radius: 8px; padding: 1.25rem; margin: 1rem 0;
+  font-size: 0.88rem; line-height: 1.8; white-space: pre-line; max-height: 400px; overflow-y: auto;
+  border: 1px solid #e5e5e1;
+}
+.nm-btn {
+  display: inline-block; padding: 0.5rem 1.2rem; border-radius: 8px;
+  font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none;
+}
+.nm-btn-primary { background: #d4380d; color: #fff; }
+.nm-btn-close { background: transparent; color: #6b6b6b; margin-left: 0.5rem; }
+</style>
+<div class="note-modal-overlay" id="nmOverlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="note-modal-box">
+    <h3 id="nmTitle"></h3>
+    <div class="nm-content" id="nmContent"></div>
+    <div>
+      <a id="nmLink" class="nm-btn nm-btn-primary" href="#" target="_blank">在小红书查看原文</a>
+      <button class="nm-btn nm-btn-close" onclick="document.getElementById('nmOverlay').style.display='none'">关闭</button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.hot-topic .topic-title a[href*="xiaohongshu.com/explore/"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = link.getAttribute('href');
+      var note = getNoteContent(href);
+      if (note && note.text && !note.text.includes('内容待抓取')) {
+        e.preventDefault();
+        document.getElementById('nmTitle').textContent = note.title;
+        document.getElementById('nmContent').textContent = note.text;
+        document.getElementById('nmLink').href = note.sourceUrl || href;
+        document.getElementById('nmOverlay').style.display = 'flex';
+      }
+    });
+  });
+});
+</script>
 </body>
 </html>
