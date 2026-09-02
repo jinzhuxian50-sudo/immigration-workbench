@@ -884,26 +884,23 @@ function setAIStatus(cls, icon, msg) {
 }
 
 // ====== REWRITE ACTIONS ======
-async function saveRewrite() {
+function saveRewrite() {
   const text = document.getElementById('rewriteText').value.trim();
   if (!text) { showToast('请先生成或输入改写内容'); return; }
   if (!selectedTopic) { showToast('请先选择一个选题'); return; }
 
-  try {
-    const res = await fetch('/api/inspirations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        source: topics[selectedTopic].title,
-        sourceCategory: topics[selectedTopic].category,
-        angle: selectedAngle || '未指定角度',
-        content: text
-      })
-    });
-    await res.json();
-    showToast('改写已保存！');
-    renderSavedList();
-  } catch { showToast('保存失败，请检查服务器连接'); }
+  const maxId = savedCache.reduce((max, s) => Math.max(max, s.id || 0), 0);
+  savedCache.push({
+    id: maxId + 1,
+    source: topics[selectedTopic].title,
+    sourceCategory: topics[selectedTopic].category,
+    angle: selectedAngle || '未指定角度',
+    content: text,
+    time: new Date().toLocaleString('zh-CN')
+  });
+  localStorage.setItem(INSP_STORAGE_KEY, JSON.stringify(savedCache));
+  showToast('改写已保存！');
+  renderSavedList();
 }
 
 function clearRewrite() {
@@ -940,40 +937,23 @@ function updateCharCount() {
   document.getElementById('charCount').textContent = document.getElementById('rewriteText').value.length + ' 字';
 }
 
-// ====== SAVED LIST (API) ======
+// ====== SAVED LIST (localStorage) ======
+const INSP_STORAGE_KEY = 'immigration_inspirations';
 let savedCache = [];
 
-async function loadSaved() {
+function loadSaved() {
   try {
-    const res = await fetch('/api/inspirations');
-    savedCache = await res.json();
+    savedCache = JSON.parse(localStorage.getItem(INSP_STORAGE_KEY) || '[]');
   } catch { savedCache = []; }
 }
 
 function renderSavedList() {
   const list = document.getElementById('savedList');
   if (savedCache.length === 0) {
-    list.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">📝</div>
-      <h3>还没有改写记录</h3>
-      <p>选择选题、点击 AI 生成、审核修改后保存，改写将出现在这里</p>
-    </div>`;
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><h3>还没有改写记录</h3><p>选择选题、点击 AI 生成、审核修改后保存，改写将出现在这里</p></div>';
     return;
   }
-  list.innerHTML = savedCache.map(s => `
-    <div class="saved-card">
-      <div class="saved-header">
-        <span class="saved-angle">${s.angle}</span>
-        <span class="saved-time">${s.time}</span>
-      </div>
-      <div class="saved-source">来源：${s.source} · ${s.sourceCategory}</div>
-      <div class="saved-content">${s.content}</div>
-      <div class="saved-actions">
-        <button class="btn small" onclick="copySaved(${s.id})">📋 复制</button>
-        <button class="btn small" onclick="deleteSaved(${s.id})">🗑 删除</button>
-      </div>
-    </div>
-  `).join('');
+  list.innerHTML = savedCache.map(s => '<div class="saved-card"><div class="saved-header"><span class="saved-angle">' + s.angle + '</span><span class="saved-time">' + s.time + '</span></div><div class="saved-source">来源：' + s.source + ' · ' + s.sourceCategory + '</div><div class="saved-content">' + s.content + '</div><div class="saved-actions"><button class="btn small" onclick="copySaved(' + s.id + ')">📋 复制</button><button class="btn small" onclick="deleteSaved(' + s.id + ')">🗑 删除</button></div></div>').join('');
 }
 
 function copySaved(id) {
@@ -983,18 +963,16 @@ function copySaved(id) {
   }
 }
 
-async function deleteSaved(id) {
-  try {
-    await fetch(`/api/inspirations/${id}`, { method: 'DELETE' });
-    await loadSaved();
-    renderSavedList();
-    showToast('已删除');
-  } catch { showToast('删除失败'); }
+function deleteSaved(id) {
+  savedCache = savedCache.filter(s => s.id !== id);
+  localStorage.setItem(INSP_STORAGE_KEY, JSON.stringify(savedCache));
+  renderSavedList();
+  showToast('已删除');
 }
 
 function exportSaved() {
   if (savedCache.length === 0) { showToast('没有可导出的内容'); return; }
-  const text = savedCache.map(s => `【${s.angle}】来源：${s.source}\n时间：${s.time}\n${s.content}\n---\n`).join('\n');
+  const text = savedCache.map(s => '【' + s.angle + '】来源：' + s.source + '\n时间：' + s.time + '\n' + s.content + '\n---\n').join('\n');
   const blob = new Blob([text], {type:'text/plain'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1006,7 +984,7 @@ function exportSaved() {
 // ====== INIT ======
 document.getElementById('rewriteText').addEventListener('input', updateCharCount);
 renderTopics();
-loadSaved().then(renderSavedList);
+loadSaved(); renderSavedList();
 </script>
 
 </body>
