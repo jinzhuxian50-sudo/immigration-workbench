@@ -181,23 +181,38 @@
 	}
 	.modal-overlay.show { display: flex; }
 	.modal-box {
-	  background: var(--bg2); border-radius: 12px; padding: 2rem; max-width: 480px;
-	  width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-	}
-	.modal-box h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.4; }
-	.modal-box .modal-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; display: flex; gap: 1rem; }
-	.modal-box .modal-meta span { background: #f5f5f5; padding: 0.2rem 0.6rem; border-radius: 6px; }
-	.modal-btn {
-	  display: inline-block; padding: 0.6rem 1.5rem; border-radius: 8px;
-	  font-size: 0.85rem; font-weight: 600; text-decoration: none; cursor: pointer;
-	  transition: all 0.15s; border: none;
-	}
-	.modal-btn-original { background: var(--accent); color: #fff; }
-	.modal-btn-original:hover { background: #b8300b; }
-	.modal-btn-search { background: var(--accent2); color: #fff; }
-	.modal-btn-search:hover { background: #1a3f6e; }
-	.modal-btn-close { background: transparent; color: var(--muted); margin-left: 0.5rem; }
-	.modal-btn-close:hover { color: var(--ink); }
+		  background: var(--bg2); border-radius: 12px; padding: 2rem; max-width: 580px;
+		  width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+		}
+		.modal-box h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.4; }
+		.modal-box .modal-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+		.modal-box .modal-meta span { background: #f5f5f5; padding: 0.2rem 0.6rem; border-radius: 6px; }
+		.modal-box .note-content {
+		  background: #faf9f7; border-radius: 8px; padding: 1.25rem; margin: 1rem 0;
+		  font-size: 0.88rem; line-height: 1.8; color: var(--ink); white-space: pre-line;
+		  max-height: 400px; overflow-y: auto; border: 1px solid var(--rule);
+		}
+		.modal-box .note-content.pending {
+		  text-align: center; color: var(--muted); padding: 2rem;
+		}
+		.modal-box .note-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.75rem; }
+		.modal-box .note-tags .ntag {
+		  font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 10px;
+		  background: #f0f0f0; color: var(--muted);
+		}
+		.modal-btn {
+		  display: inline-block; padding: 0.6rem 1.5rem; border-radius: 8px;
+		  font-size: 0.85rem; font-weight: 600; text-decoration: none; cursor: pointer;
+		  transition: all 0.15s; border: none;
+		}
+		.modal-btn-original { background: var(--accent); color: #fff; }
+		.modal-btn-original:hover { background: #b8300b; }
+		.modal-btn-search { background: var(--accent2); color: #fff; }
+		.modal-btn-search:hover { background: #1a3f6e; }
+		.modal-btn-close { background: transparent; color: var(--muted); margin-left: 0.5rem; }
+		.modal-btn-close:hover { color: var(--ink); }
+		.modal-btn-scrape { background: #389e0d; color: #fff; }
+		.modal-btn-scrape:hover { background: #2d7a0a; }
 </style>
 </head>
 <body>
@@ -370,21 +385,69 @@ function getTopicUrl(t) {
 	}
 
 	function showTopicDetail(t) {
-	  const hasUrl = !!t.url;
-	  const url = getTopicUrl(t);
-	  document.getElementById('modalTitle').textContent = t.title;
-	  document.getElementById('modalCategory').textContent = t.category;
-	  document.getElementById('modalLikes').textContent = t.likes > 0 ? t.likes.toLocaleString() + ' 赞' : '—';
-	  document.getElementById('modalLink').href = url;
-	  document.getElementById('modalLink').textContent = hasUrl ? '📖 查看原文' : '🔍 搜索原文';
-	  document.getElementById('modalLink').className = hasUrl ? 'modal-btn modal-btn-original' : 'modal-btn modal-btn-search';
-	  document.getElementById('modalOverlay').style.display = 'flex';
-	}
+		  const hasUrl = !!t.url;
+		  const url = getTopicUrl(t);
+		  document.getElementById('modalTitle').textContent = t.title;
+		  document.getElementById('modalCategory').textContent = t.category;
+		  document.getElementById('modalLikes').textContent = t.likes > 0 ? t.likes.toLocaleString() + ' 赞' : '—';
+		  
+		  // Try to get stored content
+		  const note = t.url ? getNoteContent(t.url) : null;
+		  const contentDiv = document.getElementById('modalContent');
+		  const tagsDiv = document.getElementById('modalTags');
+		  const linkBtn = document.getElementById('modalLink');
+		  
+		  if (note && note.text && !note.text.includes('内容待抓取')) {
+		    // Has stored content - show it
+		    contentDiv.innerHTML = note.text;
+		    contentDiv.className = 'note-content';
+		    linkBtn.href = note.sourceUrl || url;
+		    linkBtn.textContent = '🔗 在小红书查看原文';
+		    linkBtn.className = 'modal-btn modal-btn-original';
+		    linkBtn.target = '_blank';
+		    // Show tags
+		    if (note.tags && note.tags.length > 0) {
+		      tagsDiv.innerHTML = note.tags.map(tag => `<span class="ntag">#${tag}</span>`).join('');
+		      tagsDiv.style.display = 'flex';
+		    } else {
+		      tagsDiv.style.display = 'none';
+		    }
+		    // Show author info
+		    if (note.author) {
+		      document.getElementById('modalAuthor').textContent = '作者：' + note.author;
+		      document.getElementById('modalAuthor').style.display = 'inline';
+		    } else {
+		      document.getElementById('modalAuthor').style.display = 'none';
+		    }
+		  } else if (hasUrl) {
+		    // Has URL but no stored content yet
+		    contentDiv.innerHTML = '📝 该笔记内容尚未抓取到本地。<br><br>点击下方按钮可在小红书查看原文（可能需要登录），或等待下次数据同步时自动抓取。';
+		    contentDiv.className = 'note-content pending';
+		    linkBtn.href = url;
+		    linkBtn.textContent = '📖 在小红书查看原文';
+		    linkBtn.className = 'modal-btn modal-btn-original';
+		    linkBtn.target = '_blank';
+		    tagsDiv.style.display = 'none';
+		    document.getElementById('modalAuthor').style.display = 'none';
+		  } else {
+		    // No URL - search
+		    contentDiv.innerHTML = '该话题暂无原文链接，可搜索查看相关讨论。';
+		    contentDiv.className = 'note-content pending';
+		    linkBtn.href = url;
+		    linkBtn.textContent = '🔍 搜索相关笔记';
+		    linkBtn.className = 'modal-btn modal-btn-search';
+		    linkBtn.target = '_blank';
+		    tagsDiv.style.display = 'none';
+		    document.getElementById('modalAuthor').style.display = 'none';
+		  }
+		  
+		  document.getElementById('modalOverlay').style.display = 'flex';
+		}
 
-	function hideModal(e) {
-	  if (e && e.target !== document.getElementById('modalOverlay')) return;
-	  document.getElementById('modalOverlay').style.display = 'none';
-	}
+		function hideModal(e) {
+		  if (e && e.target !== document.getElementById('modalOverlay')) return;
+		  document.getElementById('modalOverlay').style.display = 'none';
+		}
 
 	function renderTopics(filter) {
 	  const list = document.getElementById('topicList');
@@ -411,18 +474,22 @@ function getTopicUrl(t) {
 	</script>
 
 	<div class="modal-overlay" id="modalOverlay" onclick="hideModal(event)">
-	  <div class="modal-box">
-	    <h3 id="modalTitle"></h3>
-	    <div class="modal-meta">
-	      <span id="modalCategory"></span>
-	      <span id="modalLikes"></span>
-	    </div>
-	    <div>
-	      <a id="modalLink" class="modal-btn" href="#" target="_blank">查看原文</a>
-	      <button class="modal-btn modal-btn-close" onclick="hideModal()">关闭</button>
-	    </div>
-	  </div>
-	</div>
+		  <div class="modal-box">
+		    <h3 id="modalTitle"></h3>
+		    <div class="modal-meta">
+		      <span id="modalCategory"></span>
+		      <span id="modalLikes"></span>
+		      <span id="modalAuthor" style="display:none"></span>
+		    </div>
+		    <div class="note-content" id="modalContent"></div>
+		    <div class="note-tags" id="modalTags" style="display:none"></div>
+		    <div style="margin-top:1rem;">
+		      <a id="modalLink" class="modal-btn" href="#" target="_blank">查看原文</a>
+		      <button class="modal-btn modal-btn-close" onclick="hideModal()">关闭</button>
+		    </div>
+		  </div>
+		</div>
 
-	</body>
-	</html>
+		<script src="note-contents.js"></script>
+		</body>
+		</html>
