@@ -312,10 +312,22 @@ function setStatus(cls, msg) {
 }
 
 // ====== Extract ======
+function cleanUrl(input) {
+  // 从粘贴的文本中提取纯URL
+  const match = input.match(/https?:\/\/[^\s\)\]\u4e00-\u9fff]+/);
+  return match ? match[0] : input;
+}
+
 async function startExtract() {
-  const url = document.getElementById('urlInput').value.trim();
-  if (!url) { showToast('请粘贴视频链接'); return; }
+  const raw = document.getElementById('urlInput').value.trim();
+  if (!raw) { showToast('请粘贴视频链接'); return; }
   if (!serverConnected) { showToast('请先启动本地服务：node server.js'); return; }
+
+  const url = cleanUrl(raw);
+  // 如果提取出了纯URL，更新输入框
+  if (url !== raw) {
+    document.getElementById('urlInput').value = url;
+  }
 
   const btn = document.getElementById('btnExtract');
   btn.disabled = true;
