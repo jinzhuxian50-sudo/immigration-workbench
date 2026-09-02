@@ -1,0 +1,64 @@
+{
+  "account": {
+    "name": "保得信移民规划",
+    "id": "63019002797",
+    "url": "https://www.xiaohongshu.com/user/profile/6673cdda0000000007004456",
+    "bio": "保得信集团 十五年香港本土企业 香港身份规划 前入境处高级主任把关",
+    "location": "广东",
+    "follows": 1,
+    "followers": 94,
+    "totalLikes": 387,
+    "totalNotes": 156
+  },
+  "snapshot": {
+    "date": "2026-09-02",
+    "period": "08-26 至 09-01",
+    "label": "近7日"
+  },
+  "weekly": {
+    "impressions": 6876,
+    "impressionsChange": 21,
+    "views": 719,
+    "viewsChange": -25,
+    "ctr": 8.7,
+    "ctrChange": -17,
+    "completionRate": 5.6,
+    "completionRateChange": -56,
+    "likes": 20,
+    "likesChange": 100,
+    "comments": 10,
+    "commentsChange": 0,
+    "saves": 3,
+    "savesChange": -40,
+    "shares": 1,
+    "sharesChange": -80,
+    "netFollowers": 7,
+    "netFollowersChange": 40,
+    "newFollowers": 7,
+    "lostFollowers": 0
+  },
+  "fans": {
+    "total": 94,
+    "new7d": 8,
+    "lost7d": 0,
+    "gender": {
+      "male": 59,
+      "female": 41
+    },
+    "interests": ["资讯", "生活记录", "教育", "商业财经", "职场", "娱乐", "社科", "旅游"],
+    "activeFans": [
+      { "name": "移问移民咨询", "interactions": 4 },
+      { "name": "快乐的小红薯鸭！", "interactions": 2 },
+      { "name": "睡莲Rita", "interactions": 1 },
+      { "name": "木子渝渝🍋🍋", "interactions": 1 }
+    ]
+  },
+  "notes": [
+    { "title": "分享拿香港身份的5种方式", "date": "2026-09-01", "impressions": 250, "views": 59, "ctr": 4.8, "likes": 4, "comments": 0, "saves": 2, "followers": 1, "shares": 0, "watchTime": 15 },
+    { "title": "香港身份有什么好处？", "date": "2026-08-21", "impressions": 481, "views": 126, "ctr": 2.7, "likes": 7, "comments": 2, "saves": 2, "followers": 5, "shares": 0, "watchTime": 5 },
+    { "title": "解析841号令究竟有何影响", "date": "2026-08-19", "impressions": 448, "views": 116, "ctr": 5.5, "likes": 3, "comments": 0, "saves": 1, "followers": 0, "shares": 0, "watchTime": 54 },
+    { "title": "重要文件遗失、跨国抚养，如何成功续签？", "date": "2026-08-18", "impressions": 396, "views": 19, "ctr": 4.5, "likes": 1, "comments": 0, "saves": 0, "followers": 0, "shares": 0, "watchTime": 147 },
+    { "title": "9月新规落地，跟准备出国的你说几句心里话", "date": "2026-08-14", "impressions": 2984, "views": 410, "ctr": 14.5, "likes": 5, "comments": 4, "saves": 2, "followers": 1, "shares": 1, "watchTime": 22 },
+    { "title": "香港身份最难的是什么？", "date": "2026-08-10", "impressions": 465, "views": 132, "ctr": 7.1, "likes": 3, "comments": 1, "saves": 0, "followers": 0, "shares": 0, "watchTime": 52 }
+  ]
+}
