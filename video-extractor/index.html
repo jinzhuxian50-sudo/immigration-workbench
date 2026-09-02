@@ -9,23 +9,14 @@
 <style>
   .ve-hero {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    color: #fff;
-    text-align: center;
+    border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem;
+    color: #fff; text-align: center;
   }
-  .ve-hero h2 {
-    font-size: 1.3rem; font-weight: 700; color: #fff;
-    border: none; margin: 0 0 0.5rem; padding: 0;
-  }
-  .ve-hero p {
-    font-size: 0.82rem; color: rgba(255,255,255,0.6);
-    margin: 0;
-  }
+  .ve-hero h2 { font-size: 1.3rem; font-weight: 700; color: #fff; border: none; margin: 0 0 0.5rem; padding: 0; }
+  .ve-hero p { font-size: 0.82rem; color: rgba(255,255,255,0.6); margin: 0; }
 
   .ve-input-group {
-    display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+    display: flex; gap: 0.5rem; margin-bottom: 1rem;
   }
   .ve-input-group input {
     flex: 1; padding: 0.75rem 1rem;
@@ -37,9 +28,8 @@
     outline: none; border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(212,56,13,0.1);
   }
-  .ve-input-group input::placeholder {
-    color: #aaa;
-  }
+  .ve-input-group input::placeholder { color: #aaa; }
+
   .btn-extract {
     padding: 0.75rem 1.5rem; border-radius: 10px;
     font-size: 0.9rem; font-weight: 700; border: none; cursor: pointer;
@@ -50,27 +40,26 @@
   .btn-extract:hover { box-shadow: 0 4px 16px rgba(212,56,13,0.4); transform: translateY(-1px); }
   .btn-extract:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
+  /* Status */
   .ve-status {
     display: flex; align-items: center; gap: 0.6rem;
     padding: 0.75rem 1rem; border-radius: 10px;
     font-size: 0.82rem; font-weight: 600; margin-bottom: 1rem;
   }
   .ve-status.idle { background: #f5f5f5; color: var(--muted); }
-  .ve-status.checking { background: #fff7ed; color: var(--warning); }
+  .ve-status.working { background: #fff7ed; color: var(--warning); }
   .ve-status.success { background: #ecfdf5; color: var(--success); }
   .ve-status.error { background: #fff1f0; color: var(--accent); }
-  .ve-status .status-dot {
-    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-  }
+  .ve-status.browser { background: #f0f5ff; color: var(--accent2); }
+  .ve-status .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .ve-status.idle .status-dot { background: #ccc; }
-  .ve-status.checking .status-dot { background: var(--warning); animation: pulse 1.2s infinite; }
+  .ve-status.working .status-dot { background: var(--warning); animation: pulse 1.2s infinite; }
   .ve-status.success .status-dot { background: var(--success); }
   .ve-status.error .status-dot { background: var(--accent); }
-  @keyframes pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
+  .ve-status.browser .status-dot { background: var(--accent2); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
+  /* Result */
   .ve-result {
     background: var(--bg2); border: 1px solid var(--rule);
     border-radius: 12px; overflow: hidden; display: none;
@@ -80,16 +69,12 @@
   .ve-video-wrapper {
     position: relative; background: #000;
     display: flex; align-items: center; justify-content: center;
-    min-height: 300px; max-height: 500px; overflow: hidden;
+    min-height: 280px; max-height: 500px; overflow: hidden;
   }
-  .ve-video-wrapper video {
-    width: 100%; max-height: 500px; border-radius: 0;
-  }
+  .ve-video-wrapper video { width: 100%; max-height: 500px; }
   .ve-video-wrapper .ve-play-overlay {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; background: rgba(0,0,0,0.3);
-    transition: background 0.2s;
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; background: rgba(0,0,0,0.3); transition: background 0.2s;
   }
   .ve-video-wrapper .ve-play-overlay:hover { background: rgba(0,0,0,0.15); }
   .ve-video-wrapper .ve-play-btn {
@@ -105,13 +90,12 @@
     justify-content: space-between; gap: 1rem; flex-wrap: wrap;
     border-bottom: 1px solid var(--rule);
   }
-  .ve-info-bar .ve-platform {
+  .ve-info-bar .ve-platform-badge {
     font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.7rem;
     border-radius: 20px; background: #fff1f0; color: var(--accent);
   }
-  .ve-info-bar .ve-meta {
-    font-size: 0.75rem; color: var(--muted);
-  }
+  .ve-info-bar .ve-meta { font-size: 0.75rem; color: var(--muted); }
+
   .ve-actions {
     padding: 1rem 1.25rem; display: flex; gap: 0.6rem; flex-wrap: wrap;
   }
@@ -123,15 +107,16 @@
     transition: all 0.15s;
   }
   .btn-download:hover { background: #2d7a0a; }
-  .btn-copy {
+  .btn-secondary {
     display: inline-flex; align-items: center; gap: 0.4rem;
     padding: 0.55rem 1.2rem; border-radius: 8px;
     font-size: 0.85rem; font-weight: 600; cursor: pointer;
     background: var(--bg2); color: var(--ink); border: 1px solid var(--rule);
     transition: all 0.15s;
   }
-  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
+  /* Server hint */
   .ve-server-hint {
     background: linear-gradient(135deg, #e6f0ff 0%, #f0f5ff 100%);
     border: 1px solid #bdd7ff; border-radius: 10px;
@@ -141,10 +126,21 @@
   .ve-server-hint strong { color: var(--ink); }
   .ve-server-hint code {
     background: rgba(0,0,0,0.06); padding: 0.15rem 0.4rem;
-    border-radius: 4px; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
+    border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
   }
 
+  /* Browser mode hint */
+  .ve-browser-hint {
+    background: linear-gradient(135deg, #fff7ed 0%, #fff1f0 100%);
+    border: 1px solid #ffd8bf; border-radius: 10px;
+    padding: 1rem 1.25rem; display: none;
+    font-size: 0.82rem; color: var(--accent); line-height: 1.6;
+  }
+  .ve-browser-hint.show { display: block; }
+  .ve-browser-hint .steps { margin-top: 0.5rem; padding-left: 1.2rem; }
+  .ve-browser-hint .steps li { margin-bottom: 0.3rem; }
+
+  /* Supported platforms */
   .ve-supported {
     display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
   }
@@ -153,11 +149,11 @@
     border-radius: 20px; background: var(--bg2); border: 1px solid var(--rule);
     color: var(--muted);
   }
-  .ve-supported .plat-chip.active { background: #ecfdf5; border-color: var(--success); color: var(--success); }
+  .ve-supported .plat-chip.direct { background: #ecfdf5; border-color: var(--success); color: var(--success); }
+  .ve-supported .plat-chip.browser { background: #f0f5ff; border-color: var(--accent2); color: var(--accent2); }
 
-  .ve-history {
-    margin-top: 2rem;
-  }
+  /* History */
+  .ve-history { margin-top: 2rem; }
   .ve-history .history-item {
     display: flex; align-items: center; gap: 0.75rem;
     padding: 0.6rem 0.8rem; border-radius: 8px; margin-bottom: 0.3rem;
@@ -168,9 +164,7 @@
     width: 48px; height: 48px; border-radius: 6px;
     background: #f0f0f0; flex-shrink: 0; overflow: hidden;
   }
-  .ve-history .history-thumb video {
-    width: 100%; height: 100%; object-fit: cover;
-  }
+  .ve-history .history-thumb video { width: 100%; height: 100%; object-fit: cover; }
   .ve-history .history-info { flex: 1; min-width: 0; }
   .ve-history .history-url {
     color: var(--muted); font-size: 0.72rem;
@@ -213,33 +207,40 @@
   <div class="page-content">
     <div class="ve-hero">
       <h2>🎬 无水印视频提取工具</h2>
-      <p>支持小红书、抖音、快手等平台，粘贴视频链接即可提取无水印视频</p>
+      <p>支持小红书、抖音、快手等平台，粘贴链接即可获取无水印视频</p>
     </div>
 
     <div class="ve-server-hint" id="serverHint">
       <strong>🔧 首次使用请先启动本地服务：</strong><br>
-      在终端中进入 <code>video-extractor</code> 目录，运行 <code>node server.js</code><br>
-      服务启动后，下方状态会显示 <span style="color:#389e0d;">● 服务已连接</span>
+      在终端中进入 <code>video-extractor</code> 目录，运行 <code>node server.js</code>
     </div>
 
     <div class="ve-supported">
       <span style="font-size:0.75rem;color:var(--muted);margin-right:0.25rem;">支持平台：</span>
-      <span class="plat-chip active">小红书</span>
-      <span class="plat-chip active">抖音</span>
-      <span class="plat-chip active">快手</span>
-      <span class="plat-chip">微博</span>
-      <span class="plat-chip">B站</span>
-      <span class="plat-chip">视频号</span>
+      <span class="plat-chip direct">抖音 · 直接提取</span>
+      <span class="plat-chip direct">快手 · 直接提取</span>
+      <span class="plat-chip browser">小红书 · 浏览器提取</span>
     </div>
 
     <div class="ve-input-group">
-      <input type="text" id="urlInput" placeholder="粘贴视频链接，如：https://www.xiaohongshu.com/explore/xxx 或 https://v.douyin.com/xxx">
-      <button class="btn-extract" id="btnExtract" onclick="extractVideo()">🔍 提取视频</button>
+      <input type="text" id="urlInput" placeholder="粘贴视频链接，如：https://v.douyin.com/xxx 或 https://www.xiaohongshu.com/...">
+      <button class="btn-extract" id="btnExtract" onclick="startExtract()">🔍 提取视频</button>
     </div>
 
     <div class="ve-status idle" id="veStatus">
       <span class="status-dot"></span>
       <span id="veStatusText">等待输入链接</span>
+    </div>
+
+    <div class="ve-browser-hint" id="veBrowserHint">
+      <strong>🔐 此链接需要浏览器提取</strong>
+      <p style="margin-top:0.4rem;">小红书页面需要登录态，已自动加入浏览器提取队列。</p>
+      <ol class="steps">
+        <li>在聊天中告诉AI助手：<strong>"提取视频"</strong></li>
+        <li>AI助手会自动打开你的浏览器，访问链接并提取视频</li>
+        <li>提取完成后，视频会自动显示在下方</li>
+      </ol>
+      <p style="margin-top:0.5rem;font-size:0.75rem;color:var(--muted);">⏳ 正在等待AI助手处理...（本页面会自动检测结果）</p>
     </div>
 
     <div class="ve-result" id="veResult">
@@ -250,15 +251,13 @@
         </div>
       </div>
       <div class="ve-info-bar">
-        <span class="ve-platform" id="vePlatform">—</span>
+        <span class="ve-platform-badge" id="vePlatform">—</span>
         <span class="ve-meta" id="veMeta"></span>
       </div>
       <div class="ve-actions">
-        <a class="btn-download" id="btnDownload" href="#" download="video.mp4" onclick="trackDownload()">
-          ⬇ 下载无水印视频
-        </a>
-        <button class="btn-copy" onclick="copyVideoUrl()">📋 复制视频链接</button>
-        <button class="btn-copy" onclick="clearResult()">✕ 清除</button>
+        <a class="btn-download" id="btnDownload" href="#" download="video.mp4" onclick="trackDownload()">⬇ 下载无水印视频</a>
+        <button class="btn-secondary" onclick="copyVideoUrl()">📋 复制链接</button>
+        <button class="btn-secondary" onclick="clearVideo()">✕ 清除</button>
       </div>
     </div>
 
@@ -284,19 +283,21 @@ const SERVER_URL = 'http://localhost:3456';
 let currentVideoUrl = null;
 let currentPlatform = null;
 let serverConnected = false;
+let pollTimer = null;
+let pendingUrl = null;
 
-// ====== Server health check ======
+// ====== Server check ======
 async function checkServer() {
   try {
     const res = await fetch(SERVER_URL + '/health', { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       serverConnected = true;
-      setStatus('success', '● 服务已连接 — 可以粘贴链接提取视频');
+      setStatus('idle', '● 服务已连接 — 粘贴链接即可提取');
       document.getElementById('serverHint').style.display = 'none';
       document.getElementById('btnExtract').disabled = false;
       return true;
     }
-  } catch(e) {}
+  } catch {}
   serverConnected = false;
   setStatus('idle', '○ 本地服务未启动，请先运行 node server.js');
   document.getElementById('serverHint').style.display = 'block';
@@ -310,20 +311,18 @@ function setStatus(cls, msg) {
   document.getElementById('veStatusText').textContent = msg;
 }
 
-// ====== Extract video ======
-async function extractVideo() {
+// ====== Extract ======
+async function startExtract() {
   const url = document.getElementById('urlInput').value.trim();
   if (!url) { showToast('请粘贴视频链接'); return; }
-  if (!serverConnected) {
-    showToast('请先启动本地服务：node server.js');
-    return;
-  }
+  if (!serverConnected) { showToast('请先启动本地服务：node server.js'); return; }
 
   const btn = document.getElementById('btnExtract');
   btn.disabled = true;
-  btn.innerHTML = '<span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span> 解析中...';
-  setStatus('checking', '⏳ 正在解析链接，提取视频中...');
-  document.getElementById('veResult').classList.remove('show');
+  btn.innerHTML = '<span class="status-dot" style="animation:pulse 1.2s infinite;background:var(--warning);"></span> 解析中...';
+  setStatus('working', '⏳ 正在解析链接...');
+  hideResult();
+  hideBrowserHint();
 
   try {
     const res = await fetch(SERVER_URL + '/extract', {
@@ -335,58 +334,105 @@ async function extractVideo() {
 
     const data = await res.json();
 
-    if (!data.success) {
-      throw new Error(data.error || '解析失败');
+    if (data.success && data.mode === 'direct') {
+      // 直接提取成功
+      showVideo(data);
+      setStatus('success', '✅ 提取成功 — 无水印视频已就绪');
+      addToHistory(url, data);
+    } else if (data.mode === 'browser') {
+      // 需要浏览器提取
+      pendingUrl = url;
+      showBrowserHint();
+      setStatus('browser', '🔐 已加入浏览器提取队列，等待AI助手处理...');
+      startPolling();
+    } else {
+      throw new Error(data.error || '提取失败');
     }
-
-    // Show result
-    currentVideoUrl = data.videoUrl;
-    currentPlatform = data.platform || detectPlatform(url);
-
-    const video = document.getElementById('veVideo');
-    video.src = data.videoUrl;
-    video.load();
-
-    document.getElementById('vePlatform').textContent = currentPlatform;
-    document.getElementById('veMeta').textContent = [
-      data.title ? `标题：${data.title}` : '',
-      data.duration ? `时长：${data.duration}` : '',
-      data.resolution ? `分辨率：${data.resolution}` : ''
-    ].filter(Boolean).join(' · ');
-
-    document.getElementById('btnDownload').href = data.videoUrl;
-    document.getElementById('btnDownload').download = (data.title || 'video') + '.mp4';
-    document.getElementById('veResult').classList.add('show');
-    document.getElementById('vePlayOverlay').style.display = 'flex';
-
-    setStatus('success', '✅ 提取成功 — 无水印视频已就绪，点击下载或复制链接');
-    addToHistory(url, data);
-
-    // Scroll to result
-    document.getElementById('veResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  } catch(e) {
-    setStatus('error', '❌ ' + (e.message || '提取失败，请检查链接是否正确'));
-    showToast('提取失败：' + e.message);
+  } catch (e) {
+    // 如果服务器提取失败，也尝试加入浏览器队列
+    setStatus('browser', '🔐 直接提取失败，尝试加入浏览器提取队列...');
+    try {
+      await fetch(SERVER_URL + '/queue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      pendingUrl = url;
+      showBrowserHint();
+      startPolling();
+    } catch (e2) {
+      setStatus('error', '❌ ' + (e.message || '提取失败'));
+      showToast('提取失败：' + e.message);
+    }
   } finally {
     btn.disabled = false;
     btn.innerHTML = '🔍 提取视频';
   }
 }
 
-function playVideo() {
-  const video = document.getElementById('veVideo');
-  const overlay = document.getElementById('vePlayOverlay');
-  video.play();
-  overlay.style.display = 'none';
+// ====== Browser hint ======
+function showBrowserHint() {
+  document.getElementById('veBrowserHint').classList.add('show');
 }
 
-function detectPlatform(url) {
-  if (url.includes('xiaohongshu.com') || url.includes('xhslink.com')) return '小红书';
-  if (url.includes('douyin.com') || url.includes('iesdouyin.com')) return '抖音';
-  if (url.includes('kuaishou.com')) return '快手';
-  if (url.includes('bilibili.com') || url.includes('b23.tv')) return 'B站';
-  if (url.includes('weibo.com')) return '微博';
-  return '其他平台';
+function hideBrowserHint() {
+  document.getElementById('veBrowserHint').classList.remove('show');
+}
+
+// ====== Polling ======
+function startPolling() {
+  stopPolling();
+  pollTimer = setInterval(async () => {
+    try {
+      const res = await fetch(SERVER_URL + '/poll');
+      const data = await res.json();
+      if (data && data.videoUrl) {
+        stopPolling();
+        hideBrowserHint();
+        showVideo(data);
+        setStatus('success', '✅ 浏览器提取完成 — 无水印视频已就绪');
+        addToHistory(pendingUrl || data.url, data);
+        pendingUrl = null;
+      }
+    } catch {}
+  }, 2000);
+}
+
+function stopPolling() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+
+// ====== Show video ======
+function showVideo(data) {
+  currentVideoUrl = data.videoUrl;
+  currentPlatform = data.platform;
+
+  const video = document.getElementById('veVideo');
+  video.src = data.videoUrl;
+  video.load();
+
+  document.getElementById('vePlatform').textContent = data.platform || '—';
+  const meta = [data.title, data.duration, data.resolution, data.author ? '作者：' + data.author : '']
+    .filter(Boolean).join(' · ');
+  document.getElementById('veMeta').textContent = meta || '';
+
+  document.getElementById('btnDownload').href = data.videoUrl;
+  document.getElementById('btnDownload').download = (data.title || 'video') + '.mp4';
+  document.getElementById('veResult').classList.add('show');
+  document.getElementById('vePlayOverlay').style.display = 'flex';
+
+  document.getElementById('veResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function hideResult() {
+  document.getElementById('veResult').classList.remove('show');
+  document.getElementById('veVideo').src = '';
+  currentVideoUrl = null;
+}
+
+function playVideo() {
+  document.getElementById('veVideo').play();
+  document.getElementById('vePlayOverlay').style.display = 'none';
 }
 
 function copyVideoUrl() {
@@ -396,30 +442,28 @@ function copyVideoUrl() {
 
 function trackDownload() {
   showToast('开始下载无水印视频...');
-  setTimeout(() => {
-    document.getElementById('vePlayOverlay').style.display = 'none';
-  }, 500);
+  setTimeout(() => { document.getElementById('vePlayOverlay').style.display = 'none'; }, 500);
 }
 
-function clearResult() {
-  document.getElementById('veResult').classList.remove('show');
-  document.getElementById('veVideo').src = '';
-  currentVideoUrl = null;
-  setStatus('success', '● 服务已连接 — 可以粘贴链接提取视频');
+function clearVideo() {
+  hideResult();
+  hideBrowserHint();
+  stopPolling();
+  pendingUrl = null;
+  setStatus('idle', serverConnected ? '● 服务已连接 — 粘贴链接即可提取' : '○ 服务未启动');
+  fetch(SERVER_URL + '/clear', { method: 'POST' }).catch(() => {});
 }
 
 // ====== History ======
 function loadHistory() {
-  try {
-    return JSON.parse(localStorage.getItem('ve_history') || '[]');
-  } catch { return []; }
+  try { return JSON.parse(localStorage.getItem('ve_history') || '[]'); } catch { return []; }
 }
 
 function addToHistory(url, data) {
   const history = loadHistory();
   history.unshift({
     url, videoUrl: data.videoUrl,
-    platform: data.platform || detectPlatform(url),
+    platform: data.platform,
     title: data.title || '',
     time: new Date().toLocaleString('zh-CN')
   });
@@ -432,18 +476,11 @@ function renderHistory() {
   const history = loadHistory();
   const container = document.getElementById('veHistory');
   const list = document.getElementById('historyList');
-
-  if (history.length === 0) {
-    container.style.display = 'none';
-    return;
-  }
+  if (history.length === 0) { container.style.display = 'none'; return; }
   container.style.display = 'block';
-
-  list.innerHTML = history.map((h, i) => `
+  list.innerHTML = history.map(h => `
     <div class="history-item">
-      <div class="history-thumb">
-        <video src="${h.videoUrl}" preload="metadata"></video>
-      </div>
+      <div class="history-thumb"><video src="${h.videoUrl}" preload="metadata"></video></div>
       <div class="history-info">
         <div style="font-weight:600;color:var(--ink);">${h.title || '未命名视频'}</div>
         <div class="history-url">${h.url}</div>
@@ -456,7 +493,7 @@ function renderHistory() {
 
 function reExtract(url) {
   document.getElementById('urlInput').value = url;
-  extractVideo();
+  startExtract();
 }
 
 function clearHistory() {
@@ -474,9 +511,9 @@ function showToast(msg) {
   t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ====== Init ======
+// ====== Events ======
 document.getElementById('urlInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') extractVideo();
+  if (e.key === 'Enter') startExtract();
 });
 
 document.getElementById('veVideo').addEventListener('play', function() {
@@ -489,11 +526,24 @@ document.getElementById('veVideo').addEventListener('pause', function() {
   }
 });
 
+// ====== Init ======
 checkServer();
 renderHistory();
-
-// Auto-check server every 30s
 setInterval(checkServer, 30000);
+
+// Resume polling if there was a pending request
+(async () => {
+  try {
+    const res = await fetch(SERVER_URL + '/request');
+    const data = await res.json();
+    if (data && data.url && data.status === 'pending') {
+      pendingUrl = data.url;
+      showBrowserHint();
+      setStatus('browser', '🔐 检测到待处理请求，等待AI助手提取...');
+      startPolling();
+    }
+  } catch {}
+})();
 </script>
 
 <style>
