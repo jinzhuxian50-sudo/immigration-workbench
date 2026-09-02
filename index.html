@@ -104,7 +104,7 @@
 
   .quick-actions {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.75rem;
     margin-bottom: 1.5rem;
   }
@@ -138,6 +138,7 @@
   .quick-action .qa-icon.kb { background: #fff1f0; }
   .quick-action .qa-icon.inspire { background: #e6f0ff; }
   .quick-action .qa-icon.analytics { background: #ecfdf5; }
+	  .quick-action .qa-icon.video { background: #f0f0ff; }
   .quick-action .qa-content h4 {
     font-size: 0.88rem;
     font-weight: 700;
@@ -149,7 +150,10 @@
     line-height: 1.4;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
+    .quick-actions { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
     .quick-actions { grid-template-columns: 1fr; }
   }
 </style>
@@ -177,6 +181,9 @@
     </a>
     <a href="analytics/index.html">
       <span class="nav-icon">📈</span> 数据监测
+    </a>
+    <a href="video-extractor/index.html">
+      <span class="nav-icon">🎬</span> 视频提取
     </a>
     <div class="nav-section">设置</div>
     <a href="#">
@@ -261,6 +268,13 @@
         <div class="qa-content">
           <h4>数据监测</h4>
           <p>记录账号数据变化，可视化复盘，追踪增长趋势</p>
+        </div>
+      </a>
+      <a href="video-extractor/index.html" class="quick-action">
+        <div class="qa-icon video">🎬</div>
+        <div class="qa-content">
+          <h4>视频提取</h4>
+          <p>粘贴链接自动提取无水印视频，支持小红书、抖音、快手</p>
         </div>
       </a>
     </div>
