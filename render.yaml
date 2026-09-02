@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: immigration-workbench
-    env: node
-    buildCommand: ""
-    startCommand: node server.js
-    plan: free
-    autoDeploy: true
